@@ -35,7 +35,7 @@ export default function LectureUnit ({lecture_id}) {
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            <UnitLink href='/'>
+            <UnitLink href={lectureDetail.url}>
                 <UnitLayout>
                     <UnitImgWrapper>
                         <UnitImag src={lectureDetail.course_image}/>
