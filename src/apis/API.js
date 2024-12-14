@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const server = 'http://apis.data.go.kr/B552881/kmooc_v2_0';
+const server = 'https://apis.data.go.kr/B552881/kmooc_v2_0';
 const decode_key = '9ofDr0x%2Fq%2F3VzRqe5l476yKpCUl3J1qxF9behOiF1Yt%2FhWujUspFMJFI%2B0C%2F51R1mIr%2BZyAPKMzTGZE2YhQrVw%3D%3D';
 const mock_api = 'https://67296e396d5fa4901b6d1e3f.mockapi.io/my_data';
 
