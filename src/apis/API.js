@@ -36,5 +36,3 @@ export const postDataAPI = async (data) => {
         console.error(err);
     }
 };
-
-//https://67296e396d5fa4901b6d1e3f.mockapi.io/my_data/courseDetail_v2_0?ServiceKey=Q4VW1efSExiJxvEWYCC4aWIEk8oQC%2BcGaJ5phhVp4lmpK0%2F0I0v6%2BKFb4RrmKXwvzY78hDM1aHmnSitjUTy6Jw%3D%3D&CourseId=${CourseId}

@@ -1,9 +1,25 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { styled } from 'styled-components'
-import { postDataAPI } from "../apis/API";
+import { getLectureDetailAPI, postDataAPI } from "../apis/API";
 
-export default function LectureUnit ({lecture}) {
+export default function LectureUnit ({lecture_id}) {
+    const [lectureDetail, setDetailedLecture] = useState([]);
     const [isHovered, setIsHovered] = useState(false);
+
+    const getLectureDetail = useCallback(async () => {
+        try {
+            // 기본 강의 목록 가져오기
+            const res = await getLectureDetailAPI(lecture_id);
+            setDetailedLecture(res);
+
+        } catch (err) {
+            console.error(err);
+        }
+    }, [lecture_id]);
+
+    useEffect(() => {
+        getLectureDetail();
+    }, [getLectureDetail]);
 
     const saveData = async (data) => {
         try {
@@ -22,17 +38,17 @@ export default function LectureUnit ({lecture}) {
             <UnitLink href='/'>
                 <UnitLayout>
                     <UnitImgWrapper>
-                        <UnitImag src={lecture.course_image}/>
+                        <UnitImag src={lectureDetail.course_image}/>
                     </UnitImgWrapper>
                     <UnitDetailWrapper>
-                        <UnitCategoryLabel>{lecture.classfy_name}</UnitCategoryLabel>
-                        <UnitTitle>{lecture.name}</UnitTitle>
-                        <UnitInstructor>{lecture.professor}</UnitInstructor>
+                        <UnitCategoryLabel>{lectureDetail.classfy_name}</UnitCategoryLabel>
+                        <UnitTitle>{lectureDetail.name}</UnitTitle>
+                        <UnitInstructor>{lectureDetail.professor}</UnitInstructor>
                     </UnitDetailWrapper>
                 </UnitLayout>
             </UnitLink>
             <UnitWishlistWrapper $isActive={isHovered}>
-                <WishlistButton type="button" onClick={() => saveData(lecture)}>+</WishlistButton>
+                <WishlistButton type="button" onClick={() => saveData(lectureDetail)}>+</WishlistButton>
             </UnitWishlistWrapper>
         </Div>
     )
@@ -57,26 +73,20 @@ margin-bottom: 10px;
 `
 
 const UnitImgWrapper = styled.div`
+display: block;
 width: 100%;
-height: 180px;
-position: relative;
-padding-bottom: calc(63%);
-background: linear-gradient(rgb(32, 32, 36), rgb(24, 24, 28));
-color: rgba(255, 255, 255, 0.65);
 overflow: hidden;
 border-radius: 8px;
-
+height: 100%;
 `
 const UnitImag = styled.img`
-width: 100%;
-height: 180px;
-top: 50%;
-left: 50%;
+width: auto;
+height: auto;
+max-width: 100%;
+max-height: 100%;
+background: linear-gradient(rgb(32. 32. 36), rgb(24, 24, 28));
 overflow: hidden;
 border-radius: 8px;
-position: absolute;
-transform: translate(-50%, -50%);
-object-fit: cover;
 `
 
 const UnitDetailWrapper = styled.div`
@@ -85,8 +95,6 @@ flex-direction: column;
 align-items: flex-start;
 text-align: left;
 gap: 10px;
-width:300px;
-padding: 10px;
 `
 
 const UnitCategoryLabel = styled.span`
@@ -95,6 +103,7 @@ font-size: 0.75rem;
 line-height: 150%;
 font-weight: 400;
 letter-spacing: 0.02em;
+margin: 0;
 padding: 0;
 `
 
