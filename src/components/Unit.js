@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { styled } from 'styled-components';
 import LectureUnit from "./LectureUnit";
 import { getLectureAPI } from "../apis/API";
@@ -7,11 +7,12 @@ export default function Unitslide() {
     const [lectures, setLectures] = useState([]);
     const [page, setPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
-    const [isLastPage, setIsLastPage] = useState(false); // 마지막 페이지 여부
+    const [isLastPage, setIsLastPage] = useState(false);
     const observerRef = useRef();
 
-    const getLectures = async () => {
+    const getLectures = useCallback(async () => {
         if (isLoading || isLastPage) return;
+
         setIsLoading(true);
         try {
             const res = await getLectureAPI(page, 30);
@@ -32,11 +33,7 @@ export default function Unitslide() {
         } finally {
             setIsLoading(false);
         }
-    };
-
-    useEffect(() => {
-        getLectures();
-    }, [page]);
+    }, [isLoading, isLastPage, page]);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -56,6 +53,10 @@ export default function Unitslide() {
             if (observerRef.current) observer.disconnect();
         };
     }, [isLoading, isLastPage]);
+
+    useEffect(() => {
+        getLectures();
+    }, [getLectures]);
 
     return (
         <div>
@@ -84,18 +85,12 @@ const Div = styled.div`
 display: flex;
 align-items: center;
 justify-content: center;
-`
-// const Topdiv = styled.div`
-// margin-top: 10px;
-// display: flex;
-// align-items: center;
-// justify-content: center;
-// `
+`;
 
 const InnerDiv = styled.div`
 width: 85%;
 display: block;
-`
+`;
 
 const SliderWrapper = styled.div`
 display: flex;
@@ -103,11 +98,11 @@ height: 60px;
 justify-content: space-between;
 margin: 18px 10px 18px 10px;
 color: #fff;
-`
+`;
 
 const LinkWrapper = styled.div`
 text-decoration: none;
-`
+`;
 
 const SliderLabel = styled.div`
 display: flex;
@@ -119,76 +114,7 @@ letter-spacing: 0.02em;
 font-size: 1.25rem;
 margin: 0;
 padding: 0;
-`
-
-const AllowWrapper = styled.svg`
-margin-left: 5px;
-vertical-align: middle;
-height: 24px;
-width: 24px;
-fill: currentColor;
-user-select: none;
-pointer-events: none;
-`
-// const SliderButtonWrapper = styled.div`
-// display: flex;
-// flex-direction: right;
-// `
-
-// const ButtonWrapper = styled.div`
-// margin-left: 10px;
-// `
-
-// const SliderButton = styled.button`
-// cursor: pointer;
-// pointer-events: none;
-// padding: 0;
-// border: none;
-// border-radius: 50%;
-// font: inherit;
-// background-color: rgb(50, 50, 54);
-// position: relative;
-// width: 30px;
-// height: 30px;
-// display: flex;
-// align-items: center;
-// justify-content: center;
-// margin: 0;
-// vertical-align: middle;
-// white-space: normal;
-// outline: none;
-// user-select: none;
-// appearance: none;
-// `
-
-// const PreButtonSpan = styled.span`
-// color: #fff;
-// fill: #fff;
-// transform: scaleX(-1);
-// padding-left: 10px;
-// opacity: 0.5;
-// z-index: 1;
-// display: flex;
-// line-height: 0;
-// width: 18px;
-// height: 18px;
-// cursor: default;
-// pointer-events: none;
-// `
-
-// const NextButtonSpan = styled.span`
-// color: #fff;
-// fill: #fff;
-// opacity: 1;
-// z-index: 1;
-// display: flex;
-// padding-left: 10px;
-// line-height: 0;
-// width: 18px;
-// height: 18px;
-// cursor: default;
-// pointer-events: none;
-// `
+`;
 
 const UnitlistWrapper = styled.div`
   display: grid;
